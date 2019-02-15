@@ -4,3 +4,4 @@ out
 build
 *.iml
 .attach_pid*
+ignore
