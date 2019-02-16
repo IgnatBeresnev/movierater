@@ -19,6 +19,12 @@ dependencies {
             /* Storage / Repository */
             [group: 'net.openhft', name: 'chronicle-map', version: '3.17.0'],
 
+            /* Mainly for rate limiter */
+            [group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'],
+
+            /* JSON (De)serializer */
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'],
+
             /* Annotations */
             [group: 'org.jetbrains', name: 'annotations', version: '13.0'],
             [group: 'net.jcip', name: 'jcip-annotations', version: '1.0'],

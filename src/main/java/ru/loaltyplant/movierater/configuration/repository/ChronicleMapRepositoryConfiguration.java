@@ -21,7 +21,7 @@ public class ChronicleMapRepositoryConfiguration {
     @Bean("movies")
     public ChronicleMap<Long, Movie> movieStorage(ChronicleMapRepositoryProperties repositoryProperties) throws IOException {
         ChronicleMap<Long, Movie> moviesMap = ChronicleMap.of(Long.class, Movie.class)
-                .entries(repositoryProperties.getMoviesAvgEntryBytes())
+                .entries(repositoryProperties.getMoviesNumberOfEntries())
                 .averageValueSize(repositoryProperties.getMoviesAvgEntryBytes())
                 .createPersistedTo(getValidMapFile(repositoryProperties.getMoviesFilePath()));
 
