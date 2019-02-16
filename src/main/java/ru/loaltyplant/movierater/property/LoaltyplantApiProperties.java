@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 @Profile(ApplicationProperties.PROFILE_LOALTYPLANT_API)
 public class LoaltyplantApiProperties {
 
+    @Getter
+    @Value("${loaltyplant.api.fjp.workers}")
+    private int fjpWorkers;
+
     @Value("${loaltyplant.api.key}")
     private String apiKey;
 

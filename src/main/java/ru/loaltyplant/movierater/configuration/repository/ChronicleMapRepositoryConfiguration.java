@@ -22,7 +22,7 @@ public class ChronicleMapRepositoryConfiguration {
     public ChronicleMap<Long, Movie> movieStorage(ChronicleMapRepositoryProperties repositoryProperties) throws IOException {
         ChronicleMap<Long, Movie> moviesMap = ChronicleMap.of(Long.class, Movie.class)
                 .entries(repositoryProperties.getMoviesNumberOfEntries())
-                .averageValueSize(repositoryProperties.getMoviesAvgEntryBytes())
+                .averageValue(repositoryProperties.getAverageMovieValue())
                 .createPersistedTo(getValidMapFile(repositoryProperties.getMoviesFilePath()));
 
         addShutdownHookToCloseMap(moviesMap);
@@ -33,7 +33,7 @@ public class ChronicleMapRepositoryConfiguration {
     public ChronicleMap<Long, Genre> genreStorage(ChronicleMapRepositoryProperties repositoryProperties) throws IOException {
         ChronicleMap<Long, Genre> genresMap = ChronicleMap.of(Long.class, Genre.class)
                 .entries(repositoryProperties.getGenresNumberOfEntries())
-                .averageValueSize(repositoryProperties.getGenresAvgEntryBytes())
+                .averageValue(repositoryProperties.getAverageGenreValue())
                 .createPersistedTo(getValidMapFile(repositoryProperties.getGenresFilePath()));
 
         addShutdownHookToCloseMap(genresMap);

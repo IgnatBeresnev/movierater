@@ -22,7 +22,7 @@ public class MovieRepositorySyncConfiguration {
         this.movieSyncService = movieSyncService;
     }
 
-    @Scheduled(initialDelay = 1000L, fixedRate = 60_000L) // TODO [beresnev] get time from config
+    @Scheduled(initialDelay = 1000L, fixedRate = 300_000L) // TODO [beresnev] get time from config
     public void schedule() {
         movieSyncService.sync(movieRepository);
     }
