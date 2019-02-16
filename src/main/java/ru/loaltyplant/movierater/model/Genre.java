@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @ThreadSafe
-public class Genre implements Serializable {
+public class Genre implements HasId, Serializable {
     private final long id;
     private final String name;
 }

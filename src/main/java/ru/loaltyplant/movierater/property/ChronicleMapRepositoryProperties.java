@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Component
 @Profile(ApplicationProperties.PROFILE_REPOSITORY_CHRONICLEMAP)
-public class ChronicleMapStorageProperties {
+public class ChronicleMapRepositoryProperties {
 
     //region MOVIES STORAGE SETTINGS
     @Value("${repository.chroniclemap.movies.path}")

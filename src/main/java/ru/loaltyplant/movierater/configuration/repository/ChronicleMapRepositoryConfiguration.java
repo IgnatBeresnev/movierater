@@ -1,4 +1,4 @@
-package ru.loaltyplant.movierater.configuration.storage;
+package ru.loaltyplant.movierater.configuration.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import net.openhft.chronicle.map.ChronicleMap;
@@ -8,34 +8,33 @@ import org.springframework.context.annotation.Profile;
 import ru.loaltyplant.movierater.model.Genre;
 import ru.loaltyplant.movierater.model.Movie;
 import ru.loaltyplant.movierater.property.ApplicationProperties;
-import ru.loaltyplant.movierater.property.ChronicleMapStorageProperties;
+import ru.loaltyplant.movierater.property.ChronicleMapRepositoryProperties;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
 @Configuration
 @Profile(ApplicationProperties.PROFILE_REPOSITORY_CHRONICLEMAP)
-public class ChronicleMapStorageConfiguration {
+public class ChronicleMapRepositoryConfiguration {
 
     @Bean("movies")
-    public ConcurrentMap<Long, Movie> movieStorage(ChronicleMapStorageProperties storageProperties) throws IOException {
+    public ChronicleMap<Long, Movie> movieStorage(ChronicleMapRepositoryProperties repositoryProperties) throws IOException {
         ChronicleMap<Long, Movie> moviesMap = ChronicleMap.of(Long.class, Movie.class)
-                .entries(storageProperties.getMoviesAvgEntryBytes())
-                .averageValueSize(storageProperties.getMoviesAvgEntryBytes())
-                .createPersistedTo(getValidMapFile(storageProperties.getMoviesFilePath()));
+                .entries(repositoryProperties.getMoviesAvgEntryBytes())
+                .averageValueSize(repositoryProperties.getMoviesAvgEntryBytes())
+                .createPersistedTo(getValidMapFile(repositoryProperties.getMoviesFilePath()));
 
         addShutdownHookToCloseMap(moviesMap);
         return moviesMap;
     }
 
     @Bean("genres")
-    public ConcurrentMap<Long, Genre> genreStorage(ChronicleMapStorageProperties storageProperties) throws IOException {
+    public ChronicleMap<Long, Genre> genreStorage(ChronicleMapRepositoryProperties repositoryProperties) throws IOException {
         ChronicleMap<Long, Genre> genresMap = ChronicleMap.of(Long.class, Genre.class)
-                .entries(storageProperties.getGenresNumberOfEntries())
-                .averageValueSize(storageProperties.getGenresAvgEntryBytes())
-                .createPersistedTo(getValidMapFile(storageProperties.getGenresFilePath()));
+                .entries(repositoryProperties.getGenresNumberOfEntries())
+                .averageValueSize(repositoryProperties.getGenresAvgEntryBytes())
+                .createPersistedTo(getValidMapFile(repositoryProperties.getGenresFilePath()));
 
         addShutdownHookToCloseMap(genresMap);
         return genresMap;

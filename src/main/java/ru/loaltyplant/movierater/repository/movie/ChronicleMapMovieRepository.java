@@ -1,5 +1,6 @@
 package ru.loaltyplant.movierater.repository.movie;
 
+import net.openhft.chronicle.map.ChronicleMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
@@ -9,25 +10,26 @@ import ru.loaltyplant.movierater.concurrent.ProgressableFuture;
 import ru.loaltyplant.movierater.model.Genre;
 import ru.loaltyplant.movierater.model.Movie;
 import ru.loaltyplant.movierater.property.ApplicationProperties;
+import ru.loaltyplant.movierater.repository.MapCrudRepository;
 import ru.loaltyplant.movierater.util.MutableInteger;
 import ru.loaltyplant.movierater.util.math.RunningAverage;
 
+import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @Repository
 @Profile(ApplicationProperties.PROFILE_REPOSITORY_CHRONICLEMAP)
-public class ChronicleMapMovieRepository implements MovieRepository {
+public class ChronicleMapMovieRepository extends MapCrudRepository<Movie> implements MovieRepository {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    private final ConcurrentMap<Long, Movie> storage;
+    private final ChronicleMap<Long, Movie> storage;
 
     @Autowired
-    public ChronicleMapMovieRepository(ConcurrentMap<Long, Movie> storage) {
+    public ChronicleMapMovieRepository(ChronicleMap<Long, Movie> storage) {
         this.storage = storage;
     }
 
@@ -57,5 +59,10 @@ public class ChronicleMapMovieRepository implements MovieRepository {
             });
             return runningAverage.getAverage();
         };
+    }
+
+    @Override
+    public Map<Long, Movie> getMapStorage() {
+        return storage;
     }
 }

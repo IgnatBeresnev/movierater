@@ -1,9 +1,7 @@
 package ru.loaltyplant.movierater.repository.genre;
 
 import ru.loaltyplant.movierater.model.Genre;
+import ru.loaltyplant.movierater.repository.CrudRepository;
 
-import java.util.List;
-
-public interface GenreRepository {
-    List<Genre> getAll();
+public interface GenreRepository extends CrudRepository<Long, Genre> {
 }

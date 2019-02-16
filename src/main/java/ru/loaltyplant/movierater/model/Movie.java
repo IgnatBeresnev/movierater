@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 @ThreadSafe
-public class Movie implements Serializable {
+public class Movie implements HasId, Serializable {
     private final long id;
     private final Set<Long> genreIds;
     private final double averageRating;
