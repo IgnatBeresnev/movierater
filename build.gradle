@@ -21,6 +21,7 @@ dependencies {
 
             /* Annotations */
             [group: 'org.jetbrains', name: 'annotations', version: '13.0'],
+            [group: 'net.jcip', name: 'jcip-annotations', version: '1.0'],
 
             /* Logging */
             [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'],

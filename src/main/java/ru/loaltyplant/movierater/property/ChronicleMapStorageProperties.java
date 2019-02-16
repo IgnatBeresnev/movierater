@@ -1,11 +1,11 @@
 package ru.loaltyplant.movierater.property;
 
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-@Data
+@Getter
 @Component
 @Profile(ApplicationProperties.PROFILE_REPOSITORY_CHRONICLEMAP)
 public class ChronicleMapStorageProperties {
