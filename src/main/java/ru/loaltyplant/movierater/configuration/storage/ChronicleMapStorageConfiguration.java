@@ -65,6 +65,6 @@ public class ChronicleMapStorageConfiguration {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log.info("Closing map with value class: {}", map.valueClass());
             map.close();
-        }));
+        }, "ChronicleMap-shutdownHook"));
     }
 }

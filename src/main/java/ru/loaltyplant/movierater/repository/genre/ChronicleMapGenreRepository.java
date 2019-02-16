@@ -21,7 +21,7 @@ public class ChronicleMapGenreRepository implements GenreRepository {
     }
 
     @Override
-    public List<Genre> getGenres() {
+    public List<Genre> getAll() {
         return new ArrayList<>(storage.values());
     }
 }

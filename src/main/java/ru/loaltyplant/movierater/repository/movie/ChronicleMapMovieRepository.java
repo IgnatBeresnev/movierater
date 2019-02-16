@@ -12,8 +12,8 @@ import ru.loaltyplant.movierater.property.ApplicationProperties;
 import ru.loaltyplant.movierater.util.MutableInteger;
 import ru.loaltyplant.movierater.util.math.RunningAverage;
 
-import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -24,10 +24,10 @@ public class ChronicleMapMovieRepository implements MovieRepository {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    private final Map<Long, Movie> storage;
+    private final ConcurrentMap<Long, Movie> storage;
 
     @Autowired
-    public ChronicleMapMovieRepository(Map<Long, Movie> storage) {
+    public ChronicleMapMovieRepository(ConcurrentMap<Long, Movie> storage) {
         this.storage = storage;
     }
 
@@ -51,10 +51,9 @@ public class ChronicleMapMovieRepository implements MovieRepository {
             storage.forEach((id, movie) -> {
                 if (movie.getGenreIds().contains(genreId)) {
                     runningAverage.add(movie.getAverageRating());
-
-                    int processedEntries = processedEntriesCounter.incrementAndGet();
-                    progressCounter.updateProcessed(processedEntries);
                 }
+                int processedEntries = processedEntriesCounter.incrementAndGet();
+                progressCounter.updateProcessed(processedEntries);
             });
             return runningAverage.getAverage();
         };

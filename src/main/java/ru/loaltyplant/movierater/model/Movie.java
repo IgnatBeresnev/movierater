@@ -11,5 +11,5 @@ import java.util.Set;
 public class Movie implements Serializable {
     private final long id;
     private final Set<Long> genreIds;
-    private final float averageRating;
+    private final double averageRating;
 }

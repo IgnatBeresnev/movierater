@@ -18,6 +18,7 @@ public class Application {
         while (test.isDone()) {
             System.out.println(test.getProgress());
         }
+        System.out.println("Waiting");
         System.out.println(test.get());
     }
 }
