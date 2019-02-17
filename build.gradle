@@ -58,7 +58,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.6'
     annotationProcessor 'org.projectlombok:lombok:1.18.6'
 
-    /* JUnit 5*/
+    /* Tests */
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+
     testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.4.0'
 }

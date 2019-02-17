@@ -8,6 +8,7 @@ import ru.loaltyplant.movierater.model.Genre;
 import ru.loaltyplant.movierater.service.GenreService;
 
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @ShellComponent
 public class GenreCommands {
@@ -20,13 +21,13 @@ public class GenreCommands {
     }
 
     @ShellMethod("Lists all genres")
-    public void genres(@ShellOption(value = "--list", defaultValue = "true") boolean list) {
+    public String genres(@ShellOption(value = "--list", defaultValue = "true") boolean list) {
         if (list) {
-            genreService.getAll().stream()
+            return genreService.getAll().stream()
                     .sorted(Comparator.comparing(Genre::getId))
-                    .forEach(genre -> {
-                        System.out.println(String.format("%d. \"%s\"", genre.getId(), genre.getName()));
-                    });
+                    .map(genre -> String.format("%d. \"%s\"", genre.getId(), genre.getName()))
+                    .collect(Collectors.joining(System.lineSeparator()));
         }
+        throw new IllegalStateException("Task execution error, should not get to here");
     }
 }

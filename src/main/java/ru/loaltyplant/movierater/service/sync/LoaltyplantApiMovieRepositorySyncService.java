@@ -77,10 +77,11 @@ public class LoaltyplantApiMovieRepositorySyncService implements RepositorySyncS
         }
 
         log.debug("Creating task to update {} pages", pagesInfo.totalPages);
-        ForkJoinTask<Void> updateAllPagesTask = forkJoinPool.submit(
-                updateAllPagesTask(repository, pagesInfo)
-        );
-        updateAllPagesTask.join();
+        List<ForkJoinTask<Void>> updateIndividualPagesSubTasks = IntStream.range(1, pagesInfo.totalPages.intValue())
+                .mapToObj(pageNum -> updateMoviesForPageSubTask(pageNum, repository))
+                .collect(Collectors.toList());
+
+        ForkJoinTask.invokeAll(updateIndividualPagesSubTasks);
     }
 
     @Nullable
@@ -96,23 +97,6 @@ public class LoaltyplantApiMovieRepositorySyncService implements RepositorySyncS
         }
 
         return objectMapper.readValue(response.body(), MoviesPageInfo.class);
-    }
-
-    private ForkJoinTask<Void> updateAllPagesTask(CrudRepository<Long, Movie> repository, MoviesPageInfo pageInfo) {
-        return new RecursiveAction() {
-            @Override
-            protected void compute() {
-                try {
-                    List<ForkJoinTask<Void>> updateIndividualPagesSubTasks = IntStream.range(1, pageInfo.totalPages.intValue())
-                            .mapToObj(pageNum -> updateMoviesForPageSubTask(pageNum, repository))
-                            .collect(Collectors.toList());
-
-                    ForkJoinTask.invokeAll(updateIndividualPagesSubTasks);
-                } catch (Throwable e) {
-                    log.error("Unable to finish update all pages task", e);
-                }
-            }
-        };
     }
 
     /**

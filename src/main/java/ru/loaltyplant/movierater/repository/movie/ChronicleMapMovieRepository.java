@@ -25,7 +25,6 @@ import java.util.concurrent.Future;
 public class ChronicleMapMovieRepository extends MapCrudRepository<Movie> implements MovieRepository {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-
     private final ChronicleMap<Long, Movie> storage;
 
     @Autowired
@@ -54,11 +53,23 @@ public class ChronicleMapMovieRepository extends MapCrudRepository<Movie> implem
                 if (movie.getGenreIds().contains(genreId)) {
                     runningAverage.add(movie.getAverageRating());
                 }
+
+                sleepIfDemonstrationMode();
+
                 int processedEntries = processedEntriesCounter.incrementAndGet();
                 progressCounter.updateProcessed(processedEntries);
             });
             return runningAverage.getAverage();
         };
+    }
+
+    private void sleepIfDemonstrationMode() {
+        if (System.getProperty("demonstration") != null) {
+            try {
+                Thread.sleep(5);
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     @Override

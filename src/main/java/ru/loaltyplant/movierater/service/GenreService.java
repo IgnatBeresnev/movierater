@@ -1,5 +1,6 @@
 package ru.loaltyplant.movierater.service;
 
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.loaltyplant.movierater.model.Genre;
@@ -19,5 +20,10 @@ public class GenreService {
 
     public List<Genre> getAll() {
         return genreRepository.getAll();
+    }
+
+    @Nullable
+    public Genre getById(long id) {
+        return genreRepository.getById(id);
     }
 }
