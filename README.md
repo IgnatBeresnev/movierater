@@ -52,3 +52,9 @@ ChronicleMap
 Проперти разбиты тематически в отдельные классы, монолитный конфиг при желании можно быстро разнести. Очень бы
 хотелось использовать [ConfigurationProperties](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/ConfigurationProperties.html),
 но ради этого одного тащить бут не вариант.
+
+### RPS
+`loaltyplant.api.maxRps=200` контролирует RPS к апи. По дефолту поставил значение 200 - при 2 тыс. страниц отрабатывает за 10 секунд (теор. макс), я посчитал это нормальным временем. Можно повысить до 500. Если больше 500, то упирается в одно из:
+1) Виснут форкнутые таски update'а repository. Сам putAll() в `ChronicleMapRepository` отрабатывает за наносекунды, но виснет именно воркер, который должен эту таску выполнить. Возможно, как-то связано с ["ForkJoinPool stalls during invokeAll/join
+"](https://stackoverflow.com/questions/16894929/forkjoinpool-stalls-during-invokeall-join). С этой проблемой не стал глубоко разбираться - гц работает с минимальными паузами, тред дампы молчат. Наверное, можно запихать таски апдейта репозитория в отдельный пул. 
+2) `java.util.concurrent.RejectedExecutionException: Thread limit exceeded replacing blocked worker`. Стандартный HttpClient из Java9-11 делает со стороны синхронный запрос `send()` как `asyncGet()`, и блочится в `get()` на CF. А CF видимо использует common пул FJP'а, и когда пул истощяется (слишком много `get()`'ов), вылетает этот эксепшн (это как я понял). Поидее, если сократить латенси loaltyplant api (или разместить приложения в одной локальной сетке), get() будет быстро возвращаться и такой ситуации не возникнет, но тут как есть. 
