@@ -27,7 +27,7 @@ public class LoaltyplantApiProperties {
     private int maxRps;
 
     public boolean isApiKeySet() {
-        return !"SECRET".equalsIgnoreCase(apiKey);
+        return !"SET_YOUR_OWN".equalsIgnoreCase(apiKey);
     }
 
     public String getMoviesUrlWithApiKeyAndPage(int page) {

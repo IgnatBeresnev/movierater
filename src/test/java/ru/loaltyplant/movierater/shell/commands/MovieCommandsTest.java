@@ -10,7 +10,7 @@ import ru.loaltyplant.movierater.service.GenreService;
 import ru.loaltyplant.movierater.service.MovieService;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -39,10 +39,10 @@ class MovieCommandsTest {
 
         // barrier will indicate that the thread is currently
         // in the loop which prints progress to console
-        CyclicBarrier executingInUpdateProgressLoopBarrier = new CyclicBarrier(2);
+        CountDownLatch executingInUpdateProgressLoopLatch = new CountDownLatch(1);
         ProgressCounter progressCounterMock = mock(ProgressCounter.class);
         when(progressCounterMock.getProgress()).then((Answer<Double>) invocation -> {
-            executingInUpdateProgressLoopBarrier.await();
+            executingInUpdateProgressLoopLatch.countDown();
             return 0d;
         });
 
@@ -61,7 +61,7 @@ class MovieCommandsTest {
         executor.shutdown(); // graceful shutdown will allow tasks to finish
 
         // make sure calculation is in progress (printing progress to console)
-        executingInUpdateProgressLoopBarrier.await();
+        executingInUpdateProgressLoopLatch.await();
         assertFalse(averageRatingResponseFuture.isDone());
         assertFalse(delegatedCompletableFuture.isCancelled());
 

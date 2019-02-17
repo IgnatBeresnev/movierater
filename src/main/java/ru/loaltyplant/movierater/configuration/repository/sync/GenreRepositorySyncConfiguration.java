@@ -22,7 +22,10 @@ public class GenreRepositorySyncConfiguration {
         this.genreSyncService = genreSyncService;
     }
 
-    @Scheduled(initialDelay = 1000L, fixedRate = 300_000L) // TODO [beresnev] get time from config
+    @Scheduled(
+            initialDelayString = "#{${sync.genres.initialDelaySec} * 1000}",
+            fixedRateString = "#{${sync.genres.fixedRateSec} * 1000}"
+    )
     public void schedule() {
         genreSyncService.sync(genreRepository);
     }

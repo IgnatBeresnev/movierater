@@ -30,6 +30,10 @@ public class ObservableInputProvider extends InteractiveShellApplicationRunner.J
         Input input = super.readInput();
         String newInput = input.rawText();
         notifyObservers(newInput);
+
+        // returned input instance is not immutable
+        // if we return it after calling rawText(),
+        // next rawText() call will return nothing
         return () -> newInput;
     }
 

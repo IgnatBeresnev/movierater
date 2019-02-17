@@ -10,9 +10,12 @@ class ChronicleMapMovieRepositoryTest extends AbstractMovieRepositoryTest {
 
     @Override
     public MovieRepository createRepository(ConcurrentMap<Long, Movie> testData) {
+        // ChronicleMap requires entries to be set to > 0
+        int entiresSize = testData.size() == 0 ? 1 : testData.size();
+
         ChronicleMap<Long, Movie> chronicleMap = ChronicleMap.of(Long.class, Movie.class)
                 .averageValue(new Movie(1L, Set.of(1L, 2L, 3L), 3.0))
-                .entries(testData.size())
+                .entries(entiresSize)
                 .create();
         chronicleMap.putAll(testData);
 
