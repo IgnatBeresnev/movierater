@@ -6,10 +6,16 @@
 
 ## Энтерпрайз решение
 
+### Как работает
+* [Видео демонстрация](https://www.youtube.com/watch?v=brdHeyHcZ_U)
+* Можно [скачать собранный мной movierater](https://drive.google.com/file/d/15OZv8jdTQQW_AYLDDN4CuNwt4WRfs8lv/view) (бесплатно без смс), там уже лежит jdk11, настроены все настройки, нужно только `start.sh` запустить. `start-demonstration-mode.sh` - ставит флажок, progressBar двигается медленно (стоит слип), на видео это во второй половине видно.
+* Собрать самому, `./gradlew build shadowJar`, при запуске главное указать путь к конфигу через `-DapplicationProperties`
+
 ### Стек
 * Java 11 (из-за встроенного [HttpClient](http://openjdk.java.net/jeps/321)), Gradle 5.1
 * Spring 5 (только context), Lombok, Jackson, JUnit 5
 * ChronicleMap
+* Spring Shell (CLI), [ProgressBar](https://github.com/ctongfei/progressbar)
 
 ### Почему ChronicleMap
 Сразу стало понятно, что надо кэшировать данные. На каждый запрос бегать по АПИ не очень оптимально:
@@ -36,6 +42,18 @@ ChronicleMap
 * Персистентность
 * Использует оффхип / mmap
 * Хорошие [показатели бенчмарков](https://jetbrains.github.io/xodus/) на итерацию (то что нам надо)
+
+### Почему Spring Shell
+Писать очередной круд на буте (в нерабочее время) - слишком скучно, из последнего, на что можно посмотреть - [вот](https://github.com/IgnatBeresnev/temporary-copy-showcase).
+
+Ну и я давно засматривался на spring shell, решил попробовать, заодно в ходе выполнения задания чему-то научиться.
+
+Вывод: я уже пожалел, он слишком сырой и непонятный в плане использования в проекте, ХОТЯ приятно выглядит. 2.0 идет только с бутом, 1.2 без бута, но с хреновой конфигурацией. Я это подробно описал в [SpringShellConfiguration](https://github.com/IgnatBeresnev/movierater/blob/master/src/main/java/ru/loaltyplant/movierater/configuration/shell/SpringShellConfiguration.java). 
+
+### Что не сделал
+Отмена подсчета вычисления в фоне реализована (там тупо `Future.cancel()` на самом деле), на нее написан [страшный тест](https://github.com/IgnatBeresnev/movierater/blob/27388edf4f01c2aa793315793103612533b7e528/src/test/java/ru/loaltyplant/movierater/shell/commands/MovieCommandsTest.java#L27), но возможности вызывать отмену из CLI нет, потому что spring shell не хочет принимать какой-либо инпут, пока ты что-то спамишь в консоль с \r (т.е в ходе работы progressbar). Я часик повозюкался, много как пробовал решить проблему - не получилось, ну и ладно.
+
+Также не стал делать интеграционные тесты с API, слишком муторно (spring test'ом поднимать весь конеткст и проч) и не очень понятно ради чего
 
 ### Архитектура
 Основная идея - репозитории (например, [ChronicleMapMovieRepository](https://github.com/IgnatBeresnev/movierater/blob/master/src/main/java/ru/loaltyplant/movierater/repository/movie/ChronicleMapMovieRepository.java))
