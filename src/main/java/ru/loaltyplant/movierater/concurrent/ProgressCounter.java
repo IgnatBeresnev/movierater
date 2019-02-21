@@ -19,7 +19,7 @@ public class ProgressCounter {
 
     public void updateProcessed(int processedAmount) {
         // validated and set here since getProgress() is called way more often that update
-        double calculatedProgressValue = this.progress = MathUtils.getPercentage(processedAmount, totalEntires);
+        double calculatedProgressValue = MathUtils.getPercentage(processedAmount, totalEntires);
         if (calculatedProgressValue < 0d) {
             this.progress = 0d;
         } else if (calculatedProgressValue > 100d) {
